@@ -12,9 +12,9 @@ on:
           - som3588-cat
       BRANCH:  
         description: 'Armbian branch'  
-        default: 'current'  
+        default: 'vendor'  
         required: false 
-        type: vendor 
+        type: choice 
         options:
           - vendor
           - edge
