@@ -91,7 +91,7 @@ jobs:
         working-directory: /mnt/workdir
         run: |
           df -hT ${PWD}
-          git clone -q --single-branch --depth=1 --branch=${{ github.event.inputs.Version }} https://github.com/armbian/build.git build 
+          git clone -q --single-branch --depth=1 --branch=${{ github.event.inputs.Version }} https://github.com/YANXIAOXIH/build.git build 
           ln -sf /mnt/workdir/build $GITHUB_WORKSPACE/build
 
           cd build/
