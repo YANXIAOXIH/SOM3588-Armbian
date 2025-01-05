@@ -98,9 +98,9 @@ jobs:
       - name: Compile Armbian [ ${{ inputs.BOARD }} ${{ inputs.RELEASE }} ] 
         run: |  
           cd /mnt/workdir/build/ 
-          ./compile.sh BOARD=${{ inputs.BOARD }} RELEASE=${{ inputs.RELEASE }} BRANCH=${{ inputs.BRANCH }} BUILD_MINIMAL=no BUILD_DESKTOP=${{ inputs.BUILD_DESKTOP }} \
-                           KERNEL_CONFIGURE=no COMPRESS_OUTPUTIMAGE=${{ inputs.COMPRESS_OUTPUTIMAGE }} BOOT_LOGO=${{ inputs.BOOT_LOGO }} 
-          
+          ##./compile.sh BOARD=${{ inputs.BOARD }} RELEASE=${{ inputs.RELEASE }} BRANCH=${{ inputs.BRANCH }} BUILD_MINIMAL=no BUILD_DESKTOP=${{ inputs.BUILD_DESKTOP }} \
+          ##                 KERNEL_CONFIGURE=no COMPRESS_OUTPUTIMAGE=${{ inputs.COMPRESS_OUTPUTIMAGE }} BOOT_LOGO=${{ inputs.BOOT_LOGO }} 
+          ./compile.sh build BOARD=som3588-cat BRANCH=vendor BUILD_DESKTOP=no BUILD_MINIMAL=no KERNEL_CONFIGURE=no RELEASE=bookworm
       - name: Set current year 和 month  
         run: |  
           echo "CURRENT_YEAR_MONTH=$(date +'%Y%m')" >> $GITHUB_ENV  
