@@ -16,21 +16,5 @@ function post_family_tweaks__som3588cat_naming_audios() {
 	mkdir -p $SDCARD/etc/udev/rules.d/
 	echo 'SUBSYSTEM=="sound", ENV{ID_PATH}=="platform-hdmi1-sound", ENV{SOUND_DESCRIPTION}="HDMI1 Audio"' > $SDCARD/etc/udev/rules.d/90-naming-audios.rules
 	echo 'SUBSYSTEM=="sound", ENV{ID_PATH}=="platform-hdmiin-sound", ENV{SOUND_DESCRIPTION}="HDMI-In Audio"' >> $SDCARD/etc/udev/rules.d/90-naming-audios.rules
-
 	return 0
 }
-
-function post_family_config_branch_vendor__kernel_som3588-cat() {
-
-	display_alert "$BOARD" " up kernel ${KERNEL_MAJOR_MINOR} for" "${BOARD}" "info"
-	declare -g KERNEL_MAJOR_MINOR="6.1" 
-	declare -g KERNELSOURCE='https://github.com/radxa/kernel.git'
-	declare -g KERNELBRANCH='branch:linux-6.1-stan-rkr4.1'
-	declare -g KERNELPATCHDIR='rk35xx-vendor-6.1'
-	declare -g -i KERNEL_GIT_CACHE_TTL=120 # 2 minutes; this is a high-traffic repo
-
-
-	declare -g BOOTBRANCH='branch:next-dev-v2024.10'
-
-}
-
