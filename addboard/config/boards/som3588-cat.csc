@@ -16,6 +16,14 @@ IMAGE_PARTITION_TABLE="gpt"
 enable_extension "bcmdhd"
 BCMDHD_TYPE="sdio"
 
+function post_family_config_branch_vendor__som3588-cat_vendor_uboot() {
+	display_alert "$BOARD" "vendor u-boot overrides for $BOARD / $BRANCH" "info"
+
+	declare -g BOOTSOURCE="https://github.com/LubanCat/u-boot.git"
+	declare -g BOOTBRANCH="branch:next-dev"
+	declare -g BOOTDIR="u-boot-${BOARD}"
+}
+
 function post_family_tweaks__som3588-cat_naming_audios() {
 	display_alert "$BOARD" "Renaming som3588-cat audios" "info"
 
