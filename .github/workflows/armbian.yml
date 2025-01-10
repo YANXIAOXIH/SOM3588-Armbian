@@ -108,6 +108,7 @@ jobs:
           ./compile.sh BOARD=${{ inputs.BOARD }} RELEASE=${{ inputs.RELEASE }} BRANCH=${{ inputs.BRANCH }} BUILD_MINIMAL=no BUILD_DESKTOP=${{ inputs.BUILD_DESKTOP }} \
                           KERNEL_CONFIGURE=no COMPRESS_OUTPUTIMAGE=${{ inputs.COMPRESS_OUTPUTIMAGE }} BOOT_LOGO=${{ inputs.BOOT_LOGO }} 
 
+          tar -cvJf cache.tar.xz cache
           
       - name: Set current year 和 month  
         run: |  
@@ -129,7 +130,7 @@ jobs:
         with:  
           tag: "Armbian_${{ github.event.inputs.Version }}_${{ github.event.inputs.RELEASE }}_${{ env.CURRENT_YEAR_MONTH }}"  
           name: "Armbian_${{ github.event.inputs.Version }}_${{ github.event.inputs.RELEASE }}_${{ env.CURRENT_YEAR_MONTH }}"  
-          artifacts: "${{ github.workspace }}/build/output/images/*"  
+          artifacts: "${{ github.workspace }}/build/output/images/*,${{ github.workspace }}/build/cache.tar.xz"  
           allowUpdates: true 
           removeArtifacts: false 
           replacesArtifacts: true 
