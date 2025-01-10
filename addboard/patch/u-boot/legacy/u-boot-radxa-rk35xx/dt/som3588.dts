@@ -89,7 +89,6 @@
 	status = "okay";
 };
 
-
 &sfc {
 	status = "disabled";
 	pinctrl-names = "default";
