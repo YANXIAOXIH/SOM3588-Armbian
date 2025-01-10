@@ -28,23 +28,3 @@ function post_family_tweaks__som3588_naming_audios() {
 
 	return 0
 }
-
-function post_family_tweaks_bsp__som3588_bluetooth() {
-	display_alert "$BOARD" "Installing ap6611s-bluetooth.service" "info"
-
-	# Bluetooth on this board is handled by a Broadcom (AP6611S) chip and requires
-	# a custom brcm_patchram_plus binary, plus a systemd service to run it at boot time
-	install -m 755 $SRC/packages/bsp/rk3399/brcm_patchram_plus_rk3399 $destination/usr/bin
-	cp $SRC/packages/bsp/rk3399/rk3399-bluetooth.service $destination/lib/systemd/system/ap6611s-bluetooth.service
-
-	# Reuse the service file, ttyS0 -> ttyS7; BCM4345C5.hcd -> SYN43711A0.hcd
-	sed -i 's/ttyS0/ttyS7/g' $destination/lib/systemd/system/ap6611s-bluetooth.service
-	sed -i 's/BCM4345C5.hcd/SYN43711A0.hcd/g' $destination/lib/systemd/system/ap6611s-bluetooth.service
-	return 0
-}
-
-function post_family_tweaks__som3588_enable_bluetooth_service() {
-	display_alert "$BOARD" "Enabling ap6611s-bluetooth.service" "info"
-	chroot_sdcard systemctl enable ap6611s-bluetooth.service
-	return 0
-}
