@@ -18,11 +18,11 @@
 #include "rk3588.dtsi"
 #include "rk3588-linux.dtsi"
 
-#include "som3588-cat-hdmi1-vp0.dtsi"
+#include "som3588-hdmi1-vp0.dtsi"
 
 / {
-	model = "SOM3588-Cat";
-	compatible = "rockchip,som3588-cat", "rockchip,rk3588";
+	model = "SOM3588";
+	compatible = "rockchip,som3588", "rockchip,rk3588";
 
 	/* If hdmirx node is disabled, delete the reserved-memory node here. */
 	reserved-memory {
@@ -1036,7 +1036,7 @@
 	remote_support_psci = <0>;
 	status = "okay";
 
-	ir_key_lubancat{
+	ir_key_som3588{
 	rockchip,usercode = <0xff00>;
 	rockchip,key_table =
         <0xba   KEY_POWER>,   //电源按键
