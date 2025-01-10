@@ -89,6 +89,11 @@
 	status = "okay";
 };
 
+&sata0 {
+	u-boot,dm-pre-reloc;
+	status = "okay";
+};
+
 &sfc {
 	status = "disabled";
 	pinctrl-names = "default";
