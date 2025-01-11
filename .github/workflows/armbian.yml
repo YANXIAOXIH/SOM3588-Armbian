@@ -6,10 +6,10 @@ on:
       BOARD:  
         description: 'Board type'  
         required: true 
-        default: 'som3588'
+        default: 'som3588-cat'
         type: choice
         options:
-          - som3588
+          - som3588-cat
       BRANCH:  
         description: 'Armbian branch'  
         default: 'vendor'  
