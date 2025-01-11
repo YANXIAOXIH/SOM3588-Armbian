@@ -15,10 +15,38 @@
 #include <dt-bindings/display/drm_mipi_dsi.h>
 #include <dt-bindings/display/rockchip_vop.h>
 #include <dt-bindings/sensor-dev.h>
+#include <dt-bindings/phy/jlsemi-dt-phy.h>
 #include "rk3588.dtsi"
 #include "rk3588-linux.dtsi"
 
+//vp0
 #include "som3588-cat-hdmi1-vp0.dtsi"
+// #include "som3588-cat-hdmi0.dtsi"
+
+//vp2 二选一
+// #include "som3588-cat-dp1-edp_port.dtsi"
+// #include "som3588-cat-hdmi1.dtsi"
+// #include "som3588-cat-dsi0-ebf410125_1080p.dtsi"
+
+//vp3
+// #include "som3588-cat-dsi1-ebf410125_1080p.dtsi"
+
+#include "som3588-cat-csi.dtsi"
+// #include "som3588-cat-cam-6x.dtsi"
+
+// #include "som3588-cat-cam0.dtsi"
+// #include "som3588-cat-cam1.dtsi"
+// #include "som3588-cat-cam2.dtsi"
+// #include "som3588-cat-cam3.dtsi"
+// #include "som3588-cat-cam4.dtsi"
+// #include "som3588-cat-cam5.dtsi"
+
+// #include "som3588-cat-cam0-imx415.dtsi"
+// #include "som3588-cat-cam1-imx415.dtsi"
+// #include "som3588-cat-cam2-imx415.dtsi"
+// #include "som3588-cat-cam3-imx415.dtsi"
+// #include "som3588-cat-cam4-imx415.dtsi"
+// #include "som3588-cat-cam5-imx415.dtsi"
 
 / {
 	model = "SOM3588-Cat";
@@ -63,6 +91,20 @@
 			gpios = <&gpio0 RK_PD3 GPIO_ACTIVE_LOW>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&sys_led_pin>;
+		};
+
+		abc_led: abc-led {
+			label = "abc_led";
+			linux,default-trigger = "heartbeat";
+			default-state = "on";
+			gpios = <&gpio6 0 GPIO_ACTIVE_HIGH>;
+		};
+
+		def_led: def-led {
+			label = "def_led";
+			linux,default-trigger = "heartbeat";
+			default-state = "on";
+			gpios = <&gpio7 2 GPIO_ACTIVE_HIGH>;
 		};
 	};
 
@@ -209,7 +251,7 @@
 	dp0_sound: dp0-sound {
 		status = "okay";
 		compatible = "rockchip,hdmi";
-		rockchip,card-name= "rockchip-dp0";
+		rockchip,card-name = "rockchip-dp0";
 		rockchip,mclk-fs = <512>;
 		rockchip,cpu = <&spdif_tx2>;
 		rockchip,codec = <&dp0 1>;
@@ -266,10 +308,10 @@
 		pwms = <&pwm4 0 5000 0>;
 		cooling-levels = <0 100 150 200 255>;
 		rockchip,temp-trips = <
-			40000	1
+			45000	1
 			50000	2
-			60000	3
-			65000	4
+			55000	3
+			60000	4
 		>;
 	};
 
@@ -375,12 +417,40 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&i2c5m2_xfer>;
 	status = "okay";
+
+	gpio6: gpio-expander@21 {
+		compatible = "nxp,pca9535";
+		status = "okay";
+		reg = <0x21>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		// pinctrl-names = "default";
+		// pinctrl-0 = <&pinctrl_pca9535_1>;
+		// interrupt-parent = <&gpio2>;
+		// interrupts = <RK_PC4 IRQ_TYPE_LEVEL_HIGH>;
+		// interrupt-controller;
+		// #interrupt-cells = <2>;
+	};
 };
 
 &i2c6 {
 	status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&i2c6m0_xfer>;
+
+	gpio7: gpio-expander@21 {
+		compatible = "nxp,pca9535";
+		status = "okay";
+		reg = <0x21>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		// pinctrl-names = "default";
+		// pinctrl-0 = <&pinctrl_pca9535_2>;
+		// interrupt-parent = <&gpio2>;
+		// interrupts = <RK_PC5 IRQ_TYPE_LEVEL_HIGH>;
+		// interrupt-controller;
+		// #interrupt-cells = <2>;
+	};
 };
 
 
@@ -1036,7 +1106,7 @@
 	remote_support_psci = <0>;
 	status = "okay";
 
-	ir_key_som3588{
+	ir_key_lubancat{
 	rockchip,usercode = <0xff00>;
 	rockchip,key_table =
         <0xba   KEY_POWER>,   //电源按键
@@ -1132,6 +1202,10 @@
 	status = "okay";
 };
 
+&rkvtunnel {
+	status = "okay";
+};
+
 /* this is a watchdog */
 &wdt {
 	status = "okay";
@@ -1189,6 +1263,14 @@
 	rgmii_phy0: phy@0 {
 		compatible = "ethernet-phy-ieee802.3-c22";
 		reg = <0x00>;
+		jl2xxx,led-enable = <(JL2XXX_LED_STATIC_OP_EN | JL1XXX_LED_MODE_EN)>;
+		jl2xxx,led-mode = <(JL2XXX_LED1_LINK10  | \
+				 JL2XXX_LED1_LINK100  | \
+				 JL2XXX_LED1_LINK1000 | \
+				 JL2XXX_LED2_LINK10   | \
+				 JL2XXX_LED2_LINK100  | \
+				 JL2XXX_LED2_LINK1000 | \
+				 JL2XXX_LED2_ACTIVITY )>; //JL PHY
 	};
 };
 
@@ -1196,43 +1278,55 @@
 	rgmii_phy1: phy@0 {
 		compatible = "ethernet-phy-ieee802.3-c22";
 		reg = <0x00>;
+		jl2xxx,led-enable = <(JL2XXX_LED_STATIC_OP_EN | JL1XXX_LED_MODE_EN)>;
+		jl2xxx,led-mode = <(JL2XXX_LED1_LINK10  | \
+				 JL2XXX_LED1_LINK100  | \
+				 JL2XXX_LED1_LINK1000 | \
+				 JL2XXX_LED2_LINK10   | \
+				 JL2XXX_LED2_LINK100  | \
+				 JL2XXX_LED2_LINK1000 | \
+				 JL2XXX_LED2_ACTIVITY )>; //JL PHY
 	};
 };
 
+/* PCIe30 PHY Port0 & Port1 */
 &pcie30phy {
 	rockchip,pcie30-phymode = <PHY_MODE_PCIE_AGGREGATION>;
 	status = "okay";
 };
 
+// PCIe30 Port0 & Port1: M.2 M-Key
 &pcie3x4 {
 	reset-gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
 	vpcie3v3-supply = <&vcc3v3_sys>;
 	status = "okay";
 };
 
-&combphy1_ps {
-	status = "okay";
-};
-
-&pcie2x1l0 {
-	reset-gpios = <&gpio4 RK_PA5 GPIO_ACTIVE_HIGH>;
-	disable-gpios = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
-	status = "okay";
-};
-
-/* SATA30/PCIe20x1_2 Combo PHY */
+/* SATA30_HOST0/PCIe20x1_2 Combo PHY */
 &combphy0_ps {
 	status = "okay";
 };
 
+// Mini-PCIe
 &sata0 {
 	status = "okay";
 };
-
 &pcie2x1l2 {
 	reset-gpios = <&gpio3 RK_PD1 GPIO_ACTIVE_HIGH>;
 	disable-gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_HIGH>;
 	status = "disabled";
+};
+
+/* SATA30_HOST1/PCIe20x1_0 Combo PHY */
+&combphy1_ps {
+	status = "okay";
+};
+
+// M.2 E-Key
+&pcie2x1l0 {
+	reset-gpios = <&gpio4 RK_PA5 GPIO_ACTIVE_HIGH>;
+	disable-gpios = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
+	status = "okay";
 };
 
 /* USB3.1/DP Combo PHY1 */
@@ -1322,7 +1416,7 @@
 	status = "okay";
 };
 
-/* USB3.1/SATA/PCIe20x1_1 Combo PHY */
+/* USB30_HOST2/SATA30_HOST2/PCIe20x1_1 Combo PHY */
 &combphy2_psu {
 	status = "okay";
 };
@@ -1424,7 +1518,7 @@
 	/* Effective level used to trigger HPD: 0-low, 1-high */
 	hpd-trigger-level = <1>;
 	hdmirx-det-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
-	pinctrl-0 = <&hdmim1_rx_cec &hdmim1_rx_hpdin &hdmim1_rx_scl &hdmim1_rx_sda &hdmirx_det>;
+	pinctrl-0 = <&hdmim0_rx_cec &hdmim1_rx_hpdin &hdmim1_rx_scl &hdmim1_rx_sda &hdmirx_det>;
 	pinctrl-names = "default";
 };
 
@@ -1509,5 +1603,13 @@
 			rockchip,pins = <1 RK_PD5 RK_FUNC_GPIO &pcfg_pull_up>;
 		};
 	};
-};
 
+	io {
+		pinctrl_pca9535_1: pinctrl-pca9535-1{
+			rockchip,pins = <2 RK_PC4 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+		pinctrl_pca9535_2: pinctrl-pca9535-2{
+			rockchip,pins = <2 RK_PC5 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+};
