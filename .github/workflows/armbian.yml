@@ -26,6 +26,7 @@ on:
         options:
           - jammy
           - bookworm
+          - trixie
           - noble
           - bullseye
       Version:
