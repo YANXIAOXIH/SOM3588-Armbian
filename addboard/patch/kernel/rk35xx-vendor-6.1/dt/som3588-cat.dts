@@ -18,7 +18,7 @@
 #include "rk3588.dtsi"
 #include "rk3588-linux.dtsi"
 
-#include "som3588-hdmi1-vp0.dtsi"
+#include "som3588-cat-hdmi1-vp0.dtsi"
 
 / {
 	model = "SOM3588-Cat";
