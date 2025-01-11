@@ -49,6 +49,17 @@
 		vin-supply = <&vcc5v0_sys>;
 	};
 
+	led_sys: led-sys {
+		u-boot,dm-pre-reloc;
+		compatible = "regulator-fixed";
+		regulator-name = "led_sys";
+		enable-active-high;
+		gpio = <&gpio3 RK_PD5 GPIO_ACTIVE_HIGH>; // Turn on user led
+		regulator-boot-on;
+		regulator-always-on;
+		vin-supply = <&vcc5v0_sys>;
+	};
+
 	adc-keys {
 		compatible = "adc-keys";
 		io-channels = <&saradc 1>;
@@ -78,12 +89,15 @@
 	status = "okay";
 };
 
-&pcie2x1l0 {
-	u-boot,dm-pre-reloc;
-	reset-gpios = <&gpio4 RK_PA5 GPIO_ACTIVE_HIGH>;
-	status = "okay";
+&sfc {
+	status = "disabled";
+	pinctrl-names = "default";
+	pinctrl-0 = <&fspim0_pins>;
 };
 
+&spi_nor {
+	status = "disabled";
+};
 
 &pinctrl {
 
