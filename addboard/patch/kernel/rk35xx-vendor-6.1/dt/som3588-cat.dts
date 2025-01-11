@@ -21,8 +21,8 @@
 #include "som3588-hdmi1-vp0.dtsi"
 
 / {
-	model = "SOM3588";
-	compatible = "rockchip,som3588", "rockchip,rk3588";
+	model = "SOM3588-CAT";
+	compatible = "rockchip,som3588-cat", "rockchip,rk3588";
 
 	/* If hdmirx node is disabled, delete the reserved-memory node here. */
 	reserved-memory {
