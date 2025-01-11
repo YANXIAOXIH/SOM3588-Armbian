@@ -2,7 +2,7 @@
 #BOARD_NAME="SOM3588 Cat"
 #BOARDFAMILY="rockchip-rk3588"
 ##BOARD_MAINTAINER=""
-#BOOTCONFIG="som3588-cat_defconfig"
+#BOOTCONFIG="SOM3588-LubanCat_defconfig"
 #KERNEL_TARGET="vendor,edge"
 #FULL_DESKTOP="yes"
 #BOOT_LOGO="desktop"
@@ -15,7 +15,7 @@
 BOARD_NAME="SOM3588 Cat"
 BOARDFAMILY="rockchip-rk3588"
 BOARD_MAINTAINER=""
-BOOTCONFIG="som3588-cat_defconfig" # vendor name, not standard, see hook below, set BOOT_SOC below to compensate
+BOOTCONFIG="SOM3588-LubanCat_defconfig" # vendor name, not standard, see hook below, set BOOT_SOC below to compensate
 BOOT_SOC="rk3588"
 KERNEL_TARGET="vendor"
 KERNEL_TEST_TARGET="vendor"
@@ -43,27 +43,4 @@ function post_family_tweaks__som3588-cat_naming_audios() {
 	echo 'SUBSYSTEM=="sound", ENV{ID_PATH}=="platform-es8388-sound", ENV{SOUND_DESCRIPTION}="ES8388 Audio"' >> $SDCARD/etc/udev/rules.d/90-naming-audios.rules
 
 	return 0
-}
-
-# Mainline U-Boot for vendor kernel
-function post_family_config_branch_vendor__som3588-cat_use_mainline_uboot() {
-	display_alert "$BOARD" "Mainline U-Boot overrides for $BOARD - $BRANCH" "info"
-
-	declare -g BOOTCONFIG="orangepi-5-plus-rk3588_defconfig"     # override the default for the board/family
-	declare -g BOOTDELAY=1                                       # Wait for UART interrupt to enter UMS/RockUSB mode etc
-	declare -g BOOTSOURCE="https://github.com/u-boot/u-boot.git" # We ❤️ mainline U-Boot
-	declare -g BOOTBRANCH="tag:v2024.10-rc3"
-	declare -g BOOTPATCHDIR="v2024.10"
-	declare -g BOOTDIR="u-boot-${BOARD}" # do not share u-boot directory
-	declare -g UBOOT_TARGET_MAP="BL31=${RKBIN_DIR}/${BL31_BLOB} ROCKCHIP_TPL=${RKBIN_DIR}/${DDR_BLOB};;u-boot-rockchip.bin u-boot-rockchip-spi.bin"
-	unset uboot_custom_postprocess write_uboot_platform write_uboot_platform_mtd # disable stuff from rockchip64_common; we're using binman here which does all the work already
-
-	# Just use the binman-provided u-boot-rockchip.bin, which is ready-to-go
-	function write_uboot_platform() {
-		dd "if=$1/u-boot-rockchip.bin" "of=$2" bs=32k seek=1 conv=notrunc status=none
-	}
-
-	function write_uboot_platform_mtd() {
-		flashcp -v -p "$1/u-boot-rockchip-spi.bin" /dev/mtd0
-	}
 }
