@@ -1,12 +1,6 @@
-
- drivers/net/phy/jlsemi-dt-phy.h  | 472 +++++++---
- b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c |   6 +-
- include/dt-bindings/phy/jlsemi-dt-phy.h |   6 +-
- 3 files changed, 318 insertions(+), 160 deletions(-)
-
 diff --git a/drivers/net/phy/jlsemi-dt-phy.h b/drivers/net/phy/jlsemi-dt-phy.h
-index 111111111111..222222222222 100644
---- a/drivers/net/phy/jlsemi-dt-phy.h
+new file mode 100644
+--- /dev/null
 +++ b/drivers/net/phy/jlsemi-dt-phy.h
 @@ -0,0 +1,341 @@
 +/* SPDX-License-Identifier: GPL-2.0
@@ -352,8 +346,8 @@ index 111111111111..222222222222 100644
 +#endif
 
 diff --git a/include/dt-bindings/phy/jlsemi-dt-phy.h b/include/dt-bindings/phy/jlsemi-dt-phy.h
-index 111111111111..222222222222 100644
---- a/include/dt-bindings/phy/jlsemi-dt-phy.h
+new file mode 100644
+--- /dev/null
 +++ b/include/dt-bindings/phy/jlsemi-dt-phy.h
 @@ -0,0 +1,341 @@
 +/* SPDX-License-Identifier: GPL-2.0
@@ -699,8 +693,8 @@ index 111111111111..222222222222 100644
 +#endif
 
 diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c
-index 111111111111..222222222222 100644
---- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c
+new file mode 100644
+--- /dev/null
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c
 @@ -146,6 +146,25 @@
  };
