@@ -1,3 +1,9 @@
+
+ drivers/net/phy/jlsemi-dt-phy.h  | 472 +++++++---
+ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c |   6 +-
+ include/dt-bindings/phy/jlsemi-dt-phy.h |   6 +-
+ 3 files changed, 318 insertions(+), 160 deletions(-)
+
 diff --git a/drivers/net/phy/jlsemi-dt-phy.h b/drivers/net/phy/jlsemi-dt-phy.h
 index 111111111111..222222222222 100644
 --- a/drivers/net/phy/jlsemi-dt-phy.h
