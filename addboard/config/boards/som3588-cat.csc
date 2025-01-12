@@ -44,3 +44,21 @@ function post_family_tweaks__som3588-cat_naming_audios() {
 
 	return 0
 }
+# Mainline U-Boot
+function post_family_config__som3588-cat_use_mainline_uboot() {
+	display_alert "$BOARD" "Using mainline U-Boot for $BOARD / $BRANCH" "info"
+
+	declare -g BOOTDELAY=1                                       # Wait for UART interrupt to enter UMS/RockUSB mode etc
+	declare -g BOOTSOURCE="https://github.com/u-boot/u-boot.git" # We ❤️ Mainline U-Boot
+	declare -g BOOTBRANCH="tag:v2025.01"
+	declare -g BOOTPATCHDIR="v2025.01"
+	declare -g BOOTDIR="u-boot-${BOARD}" # do not share u-boot directory
+	declare -g UBOOT_TARGET_MAP="BL31=${RKBIN_DIR}/${BL31_BLOB} ROCKCHIP_TPL=${RKBIN_DIR}/${DDR_BLOB};;u-boot-rockchip.bin"
+	unset uboot_custom_postprocess write_uboot_platform write_uboot_platform_mtd # Disable stuff from rockchip64_common; we're using binman here which does all the work
+
+	# Just use the binman-provided u-boot-rockchip.bin, which is ready-to-go
+	function write_uboot_platform() {
+		dd "if=$1/u-boot-rockchip.bin" "of=$2" bs=32k seek=1 conv=notrunc status=none
+	}
+}
+
