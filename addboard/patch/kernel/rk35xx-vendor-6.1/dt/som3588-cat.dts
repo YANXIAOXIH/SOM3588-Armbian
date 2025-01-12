@@ -49,7 +49,7 @@
 // #include "som3588-cat-cam5-imx415.dtsi"
 
 / {
-	model = "SOM3588-Cat";
+	model = "SOM3588 Cat";
 	compatible = "rockchip,som3588-cat", "rockchip,rk3588";
 
 	/* If hdmirx node is disabled, delete the reserved-memory node here. */
@@ -64,6 +64,10 @@
 			reg = <0x0 (256 * 0x100000) 0x0 (256 * 0x100000)>;
 			linux,cma-default;
 		};
+	};
+
+	chosen: chosen {
+		bootargs = "earlycon=uart8250,mmio32,0xfeb50000 console=ttyFIQ0 coherent_pool=1m irqchip.gicv3_pseudo_nmi=0";
 	};
 
 	adc_keys: adc-keys {
