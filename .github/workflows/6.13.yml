@@ -115,7 +115,7 @@ jobs:
 
           cd build/
           # 复制 config 和 userpatches 目录文件    
-          cp -rf ${{ github.workspace }}/addboard/patch/kernel/rk35xx-vendor-6.1/* patch/kernel/archive/rockchip-6.13
+          cp -rf ${{ github.workspace }}/addboard/patch/kernel/rk35xx-vendor-6.1/* patch/kernel/archive/rockchip64-6.13
           cp -rf ${{ github.workspace }}/addboard/config/* config
           mkdir -p userpatches
           cp -rf ${{ github.workspace }}/addboard/patch/* userpatches
