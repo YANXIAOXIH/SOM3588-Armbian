@@ -1,5 +1,6 @@
 diff --git a/drivers/net/phy/jlsemi-dt-phy.h b/drivers/net/phy/jlsemi-dt-phy.h
---- /dev/null
+index 111111111111..222222222222 100644
+--- a/drivers/net/phy/jlsemi-dt-phy.h
 +++ b/drivers/net/phy/jlsemi-dt-phy.h
 @@ -0,0 +1,341 @@
 +/* SPDX-License-Identifier: GPL-2.0
@@ -345,7 +346,8 @@ diff --git a/drivers/net/phy/jlsemi-dt-phy.h b/drivers/net/phy/jlsemi-dt-phy.h
 +#endif
 
 diff --git a/include/dt-bindings/phy/jlsemi-dt-phy.h b/include/dt-bindings/phy/jlsemi-dt-phy.h
---- /dev/null
+index 111111111111..222222222222 100644
+--- a/include/dt-bindings/phy/jlsemi-dt-phy.h
 +++ b/include/dt-bindings/phy/jlsemi-dt-phy.h
 @@ -0,0 +1,341 @@
 +/* SPDX-License-Identifier: GPL-2.0
@@ -691,7 +693,8 @@ diff --git a/include/dt-bindings/phy/jlsemi-dt-phy.h b/include/dt-bindings/phy/j
 +#endif
 
 diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c
---- /dev/null
+index 111111111111..222222222222 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c
 @@ -146,6 +146,25 @@
  };
