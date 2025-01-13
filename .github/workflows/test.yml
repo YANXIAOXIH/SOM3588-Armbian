@@ -1,16 +1,17 @@
 name: Build-cyber-aib-standard
 on:
   workflow_dispatch:
-
-inputs:
-  board:
-    required: true
-  flavor:
-    required: true
-  release-id:
-    required: false
-  github-token:
-    required: false
+on:  
+  workflow_dispatch:  
+    inputs:
+      board:
+        required: true
+      flavor:
+        required: true
+      release-id:
+        required: false
+      github-token:
+        required: false
 
 
 jobs:
