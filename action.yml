@@ -85,8 +85,8 @@ inputs:
   armbian_release_body:
     description: "Armbian images"
     required: false
-    default: "Build with [Armbian tools](https://github.com/YANXIAOXIH/som3588-cat-armbian)"
-
+    default: "Build with [Armbian tools](https://github.com/armbian/build)"
+        
   armbian_release_tag:
     description: "Armbian release tag"
     required: false
@@ -125,7 +125,7 @@ runs:
     - name: "Checkout Armbian build framework"
       uses: actions/checkout@v4
       with:
-        repository: armbian/build
+        repository: YANXIAOXIH/som3588-cat-armbian
         ref: ${{ inputs.armbian_branch }}
         clean: false
         path: build
@@ -148,7 +148,7 @@ runs:
         #mkdir -pv build/userpatches
         #rsync -av os/userpatches/. build/userpatches/
         #[[ -d custom/userpatches ]] && rsync -av custom/userpatches/. build/userpatches/
-        cp os/config/boards/. build/config/boards
+
         mkdir build/userpatches
         cp os/userpatches/customize-image.sh build/userpatches/customize-image.sh
 
