@@ -150,7 +150,8 @@ runs:
         #[[ -d custom/userpatches ]] && rsync -av custom/userpatches/. build/userpatches/
 
         mkdir build/userpatches
-        cp os/userpatches/customize-image.sh build/userpatches/customize-image.sh
+        cp -r os/userpatches/. build/userpatches/
+        #cp os/userpatches/customize-image.sh build/userpatches/customize-image.sh
 
     - shell: bash
       run: |
