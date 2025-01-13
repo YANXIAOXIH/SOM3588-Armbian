@@ -85,7 +85,7 @@ inputs:
   armbian_release_body:
     description: "Armbian images"
     required: false
-    default: "Build with [Armbian tools](https://github.com/armbian/build)"
+    default: "Build with [Armbian tools](https://github.com/YANXIAOXIH/som3588-cat-armbian)"
 
   armbian_release_tag:
     description: "Armbian release tag"
