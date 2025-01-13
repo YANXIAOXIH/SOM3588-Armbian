@@ -1,7 +1,15 @@
 name: Build-standard
 on:
   workflow_dispatch:
-
+inputs:
+  board:
+    required: true
+  flavor:
+    required: true
+  release-id:
+    required: false
+  github-token:
+    required: false
 jobs:
   prepare_release:
     runs-on: ubuntu-latest
@@ -40,10 +48,6 @@ jobs:
           DEL_PATH=$(pwd)
           cd .. && rm -rf ${DEL_PATH}
           mkdir ${DEL_PATH} && cd ${DEL_PATH}
-      - name: Checkout
-        uses: actions/checkout@v2
-
-
       - name: Checkout
         uses: actions/checkout@v3
         with:
