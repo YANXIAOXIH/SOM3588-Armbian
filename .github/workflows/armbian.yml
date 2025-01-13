@@ -1,97 +1,83 @@
-name: Build Armbian test
-  
-on:  
-  workflow_dispatch:  
-    inputs:  
-      BOARD:  
-        description: 'Board type'  
-        required: true 
+name: Build-SOM3588Cat-Armbian
+
+on:
+  workflow_dispatch:
+    inputs:
+      BOARD:
+        description: 'Board type'
+        required: true
         default: 'som3588-cat'
         type: choice
         options:
-          - som3588-cat
-      BRANCH:  
-        description: 'Armbian branch'  
-        default: 'vendor'  
-        required: false 
-        type: choice 
+          - 'som3588-cat'
+      BRANCH:
+        description: 'Armbian branch'
+        default: 'vendor'
+        required: true
+        type: choice
         options:
-          - vendor
-          - edge
-      RELEASE:  
-        description: 'Release name' 
+          - 'current'
+          - 'edge'
+          - 'vendor'
+      RELEASE:
+        description: 'Release name'
         default: 'bookworm'
-        required: true  
+        required: true
         type: choice
         options:
-          - jammy
-          - mantic
-          - bookworm
-          - trixie
-          - noble
-          - bullseye
-      Version:
-        description: 'Armbian Version'
-        default: 'main'
-        required: false 
-        type: choice
-        options: 
-          - main
-          - v24.11
-          - v24.08
-          - rk3588-6.12-initial
-      BUILD_DESKTOP:  
-        description: 'Build desktop environment'  
-        default: 'no'  
-        required: false  
+          - 'bookworm'
+          - 'trixie'
+          - 'jammy'
+          - 'noble'
+      BUILD_DESKTOP:
+        description: 'Build desktop environment'
+        default: 'no'
+        required: false
         type: choice
         options:
-          - no
-          - yes
-      COMPRESS_OUTPUTIMAGE:  
-        description: 'Compress output image'  
-        default: 'sha,xz'  
-        required: false  
-        type: string  
-      BOOT_LOGO:  
-        description: 'Include boot logo'  
-        default: 'yes'  
-        required: false  
-        type: choice 
+          - 'yes'
+          - 'no'
+      BUILD_MINIMAL:
+        description: 'BUILD MINIMAL environment'
+        default: 'yes'
+        required: false
+        type: choice
         options:
-          - yes
-          - no
-env:
-  TZ: America/New_York
-  
-jobs:  
-  build-armbian:  
-    runs-on: ubuntu-latest  
-    steps:  
-      - name: Checkout  
-        uses: actions/checkout@v3  
+          - 'yes'
+          - 'no'
+      PREFER_DOCKER:
+        description: 'Use Docker build'
+        default: 'no'
+        required: false
+        type: choice
+        options:
+          - 'yes'
+          - 'no'
+      DOCKER_ARMBIAN_BASE_IMAGE:
+        description: 'Docker IMAGE'
+        default: 'ubuntu:jammy'
+        required: false
+        type: choice
+        options:
+          - 'ubuntu:jammy'
+          - 'ubuntu:noble'
+          - 'debian:bookworm'
 
-      - name: 检查服务器配置  
-        run: |
-          echo "查看服务器配置"
-          echo -e "------------------------------- CPU信息 -------------------------------\n"
-          echo "CPU物理数量:$(cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l)"
-          echo -e "CPU核心及版本信息: $(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
-          echo -e "------------------------------- 内存信息 -------------------------------\n"
-          echo "已安装内存详细信息: "
-          sudo lshw -short -C memory | grep GiB
-          echo -e "\n"
-          echo -e "------------------------------- 磁盘信息 -------------------------------\n"
-          echo -e "磁盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l) \n"
-          echo "------------------------------- 磁盘详情 -------------------------------\n"
-          df -Th
-        
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  build-armbian:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Initialization environment
         id: init
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          # 清理 Docker 镜像和软件缓存
           docker_images_ids=$(docker images -q)
           if [ -n "$docker_images_ids" ]; then
             docker rmi $docker_images_ids
@@ -100,62 +86,71 @@ jobs:
           sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* openjdk* mysql* php* mongodb* dotnet* moby* snapd* android* || true
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
-          # 设置时区并创建工作目录
           sudo timedatectl set-timezone "${TZ}"
           sudo mkdir -p /mnt/workdir
           sudo chown $USER:$GROUPS /mnt/workdir
           df -Th
-  
+
       - name: Download source code
         working-directory: /mnt/workdir
         run: |
           df -hT ${PWD}
-          git clone -q --single-branch --depth=1 --branch=${{ github.event.inputs.Version }} https://github.com/armbian/build.git build 
+          git clone -q --single-branch --depth=1 --branch=main https://github.com//YANXIAOXIH/som3588-cat-armbian.git build
           ln -sf /mnt/workdir/build $GITHUB_WORKSPACE/build
 
-          cd build/
-          # 复制 config 和 userpatches 目录文件    
-          cp -rf ${{ github.workspace }}/addboard/config/* config
-          mkdir -p userpatches
-          cp -rf ${{ github.workspace }}/addboard/patch/* userpatches
+      - name: Apply patches
+        run: |
+          cd $GITHUB_WORKSPACE/build
+          chmod +x $GITHUB_WORKSPACE/scripts/apply_patches.sh
+          $GITHUB_WORKSPACE/scripts/apply_patches.sh
           ls -la
-  
-      - name: Compile Armbian [ ${{ inputs.BOARD }} ${{ inputs.RELEASE }} ] 
-        run: |  
-          cd /mnt/workdir/build/ 
-          ./compile.sh BOARD=${{ inputs.BOARD }} RELEASE=${{ inputs.RELEASE }} BRANCH=${{ inputs.BRANCH }} BUILD_MINIMAL=no BUILD_DESKTOP=${{ inputs.BUILD_DESKTOP }} \
-                          KERNEL_CONFIGURE=no COMPRESS_OUTPUTIMAGE=${{ inputs.COMPRESS_OUTPUTIMAGE }} BOOT_LOGO=${{ inputs.BOOT_LOGO }} 
-          
-      - name: Set current year 和 month  
-        run: |  
-          echo "CURRENT_YEAR_MONTH=$(date +'%Y%m')" >> $GITHUB_ENV  
+
+      - name: Compile Armbian [ ${{ inputs.BOARD }} ${{ inputs.BRANCH }} ${{ inputs.RELEASE }} ]
+        run: |
+          cd /mnt/workdir/build/
+          ./compile.sh build BOARD=${{ inputs.BOARD }} BRANCH=${{ inputs.BRANCH }} RELEASE=${{ inputs.RELEASE }} BUILD_MINIMAL=${{ inputs.BUILD_MINIMAL }} BUILD_DESKTOP=${{ inputs.BUILD_DESKTOP }} \
+            PREFER_DOCKER=${{ inputs.PREFER_DOCKER }} DOCKER_ARMBIAN_BASE_IMAGE=${{ inputs.DOCKER_ARMBIAN_BASE_IMAGE }} COMPRESS_OUTPUTIMAGE=xz KERNEL_CONFIGURE=no DEB_COMPRESS=xz
+
+      - name: Set current year and month
+        run: |
+          echo "CURRENT_YEAR_MONTH=$(date +'%Y%m')" >> $GITHUB_ENV
 
       - name: Prepare Release Metadata
-        run: |  
-          # 提取版本号
-          # latest_image=$(ls ${{ github.workspace }}/build/output/images/Armbian-unofficial_*.img.xz | grep -oE 'Armbian-unofficial_[0-9.]+_.*' | sort -V | tail -n 1) 
-          latest_image=$(ls ${{ github.workspace }}/build/output/images/Armbian-unofficial_*.img.xz | sort -V | tail -n 1)
-          version=$(echo "$latest_image" | cut -d'_' -f2)  
-  
-          # 将版本号设置为环境变量  
-          echo "VERSION=$version" >> $GITHUB_ENV
-        
-      - name: Upload image to Release  
-        if: success() 
+        run: |
+          latest_image=$(ls ${{ github.workspace }}/build/output/images/Armbian_*.img.xz 2>/dev/null | sort -V | tail -n 1)
+
+          if [ -z "$latest_image" ]; then
+            echo "No image files found."
+            exit 1
+          fi
+
+          VERSION=$(echo "$latest_image" | cut -d '_' -f 2)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Extracted VERSION: $VERSION"
+
+      - name: Upload image to Release
+        if: success()
         uses: ncipollo/release-action@main
-        with:  
-          tag: "Armbian_${{ github.event.inputs.Version }}_${{ env.CURRENT_YEAR_MONTH }}"  
-          name: "Armbian_${{ github.event.inputs.Version }}_${{ env.CURRENT_YEAR_MONTH }}"  
-          artifacts: "${{ github.workspace }}/build/output/images/*"  
-          allowUpdates: true 
-          removeArtifacts: false 
-          replacesArtifacts: true 
-          token: ${{ secrets.GITHUB_TOKEN }}  
-          body: |  
-            ### Armbian Image Information  
-            - Release: ${{ github.event.inputs.RELEASE }}    
-            - Version: ${{ env.VERSION }}  
-            ### Armbian Image Verification  
-            - sha256sum   
-          draft: false  
-          prerelease: false  
+        with:
+          tag: "Armbian-${{ inputs.RELEASE }}-${{ env.CURRENT_YEAR_MONTH }}"
+          name: "Armbian-${{ inputs.RELEASE }}-${{ env.CURRENT_YEAR_MONTH }}"
+          artifacts: "${{ github.workspace }}/build/output/images/*"
+          allowUpdates: true
+          removeArtifacts: false
+          replacesArtifacts: true
+          token: ${{ secrets.GH_TOKEN }}
+          body: |
+            ### Armbian Image Information
+            - Release: ${{ inputs.RELEASE }}
+            - Version: ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+
+      - name: Delete releases and workflows runs
+        uses: ophub/delete-releases-workflows@main
+        with:
+          delete_releases: true
+          releases_keep_latest: 10
+          delete_workflows: true
+          workflows_keep_day: 3
+          gh_token: ${{ secrets.GH_TOKEN }}
