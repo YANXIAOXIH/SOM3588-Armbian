@@ -139,10 +139,22 @@ runs:
 
     - shell: bash
       run: |
+       cd ./build
+        touch .ignore_changes
+        
+        sed -i "s|# CONFIG_ATH9K is not set|CONFIG_ATH9K_HW=m\nCONFIG_ATH9K_COMMON=m\nCONFIG_ATH9K_BTCOEX_SUPPORT=y\nCONFIG_ATH9K=m\nCONFIG_ATH9K_PCI=y\nCONFIG_ATH9K_AHB=y\nCONFIG_ATH9K_RFKILL=y\nCONFIG_ATH9K_PCOEM=y|g" config/kernel/linux-rockchip-rk3588-legacy.config
+        sed -i "s|# CONFIG_ATH9K_HTC is not set|CONFIG_ATH9K_HTC=m|g" config/kernel/linux-rockchip-rk3588-legacy.config
+        
+        if [ ${{ inputs.board }} == "rock-5b" ]; then
+          mkdir userpatches
+          cp ../userpatches/customize-image.sh userpatches/customize-image.sh
+        fi
+
+
 
         # read version from upstream Armbian OS
-        cat os/stable.json | jq '.version' | sed "s/\"//g" | sed 's/^/ARMBIAN_VERSION=/' >> $GITHUB_ENV
-        [[ "${{ inputs.armbian_version }}" != '' ]] && echo "ARMBIAN_VERSION=${{ inputs.armbian_version }}" >> $GITHUB_ENV
+        #cat os/stable.json | jq '.version' | sed "s/\"//g" | sed 's/^/ARMBIAN_VERSION=/' >> $GITHUB_ENV
+        #[[ "${{ inputs.armbian_version }}" != '' ]] && echo "ARMBIAN_VERSION=${{ inputs.armbian_version }}" >> $GITHUB_ENV
 
         # copy os userpatches and custom
         #mkdir -pv build/userpatches
