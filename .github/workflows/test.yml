@@ -1,4 +1,4 @@
-name: Build-cyber-aib-standard
+name: Build-som3588-cat
 on:
   workflow_dispatch:
 
@@ -29,9 +29,9 @@ jobs:
     needs: prepare_release
     strategy:
       matrix:
-        BOARD: [cyber-aib]
+        BOARD: [som3588-cat]
         DISTRO: [armbian]
-        FLAVOR: [ubuntu]
+        FLAVOR: [debian]
         BRANCH: [vendor]
     steps:
       - name: Check Pre Sources
@@ -43,7 +43,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Upload Armbian image
-        uses: YANXIAOXIH/SOM3588-Armbian@compile
+        uses: chainsx/armbian-compile-action@cyber-standard
         if: matrix.DISTRO == 'armbian'
         with:
           branch: ${{ matrix.BRANCH }}
