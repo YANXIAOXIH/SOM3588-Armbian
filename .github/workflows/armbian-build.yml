@@ -5,7 +5,7 @@ jobs:
   build-armbian:
     runs-on: ubuntu-latest
     steps:
-      - uses: YANXIAOXIH/SOM3588-Armbian@armban
+      - uses: YANXIAOXIH/SOM3588-Armbian@armbin
         with:
           armbian_token:     "${{ secrets.GITHUB_TOKEN }}"  # GitHub token
           armbian_release:   "jammy"                        # userspace
