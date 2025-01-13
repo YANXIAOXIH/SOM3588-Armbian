@@ -98,13 +98,6 @@ jobs:
           git clone -q --single-branch --depth=1 --branch=main https://github.com//YANXIAOXIH/som3588-cat-armbian.git build
           ln -sf /mnt/workdir/build $GITHUB_WORKSPACE/build
 
-      - name: Apply patches
-        run: |
-          cd $GITHUB_WORKSPACE/build
-          chmod +x $GITHUB_WORKSPACE/scripts/apply_patches.sh
-          $GITHUB_WORKSPACE/scripts/apply_patches.sh
-          ls -la
-
       - name: Compile Armbian [ ${{ inputs.BOARD }} ${{ inputs.BRANCH }} ${{ inputs.RELEASE }} ]
         run: |
           cd /mnt/workdir/build/
