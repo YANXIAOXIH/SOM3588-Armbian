@@ -110,16 +110,23 @@ jobs:
 
       - name: Prepare Release Metadata
         run: |
-          latest_image=$(ls ${{ github.workspace }}/build/output/images/Armbian_*.img.xz 2>/dev/null | sort -V | tail -n 1)
+          #latest_image=$(ls ${{ github.workspace }}/build/output/images/Armbian_*.img.xz 2>/dev/null | sort -V | tail -n 1)
 
-          if [ -z "$latest_image" ]; then
-            echo "No image files found."
-            exit 1
-          fi
+          # if [ -z "$latest_image" ]; then
+          #  echo "No image files found."
+          #   exit 1
+          # fi
 
-          VERSION=$(echo "$latest_image" | cut -d '_' -f 2)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Extracted VERSION: $VERSION"
+          # VERSION=$(echo "$latest_image" | cut -d '_' -f 2)
+          # echo "VERSION=$VERSION" >> $GITHUB_ENV
+          # echo "Extracted VERSION: $VERSION"
+
+
+          latest_image=$(ls ${{ github.workspace }}/build/output/images/Armbian*.img.xz | sort -V | tail -n 1)
+          version=$(echo "$latest_image" | cut -d'_' -f2)  
+
+
+           echo "VERSION=$version" >> $GITHUB_ENV
 
       - name: Upload image to Release
         if: success()
@@ -138,12 +145,3 @@ jobs:
             - Version: ${{ env.VERSION }}
           draft: false
           prerelease: false
-
-      - name: Delete releases and workflows runs
-        uses: ophub/delete-releases-workflows@main
-        with:
-          delete_releases: true
-          releases_keep_latest: 10
-          delete_workflows: true
-          workflows_keep_day: 3
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
