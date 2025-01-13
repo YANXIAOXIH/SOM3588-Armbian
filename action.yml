@@ -85,7 +85,7 @@ inputs:
   armbian_release_body:
     description: "Armbian images"
     required: false
-    default: "Build with [Armbian tools](https://github.com/YANXIAOXIH/som3588-cat-armbian)"
+    default: "Build with [Armbian tools](https://github.com/armbian/build)"
 
   armbian_release_tag:
     description: "Armbian release tag"
@@ -146,10 +146,9 @@ runs:
 
         # copy os userpatches and custom
         mkdir -pv build/userpatches
-        #rsync -av os/userpatches/. build/userpatches/
-        #[[ -d custom/userpatches ]] && rsync -av custom/userpatches/. build/userpatches/
-        cp os/userpatches/. build/userpatches/
-  
+        rsync -av os/userpatches/. build/userpatches/
+        [[ -d custom/userpatches ]] && rsync -av custom/userpatches/. build/userpatches/
+
     - shell: bash
       run: |
 
