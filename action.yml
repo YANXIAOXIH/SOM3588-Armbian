@@ -98,7 +98,7 @@ runs:
 
     - name: Free Github Runner
       if: ${{ inputs.armbian_runner_clean != '' }}
-      uses: descriptinc/free-disk-space@main
+      uses: actions/checkout@v3
       with:
         android: true
         dotnet: true
@@ -125,7 +125,7 @@ runs:
     - name: "Checkout Armbian build framework"
       uses: actions/checkout@v4
       with:
-        repository: YANXIAOXIH/som3588-cat-armbian
+        repository: armbian/build
         ref: ${{ inputs.armbian_branch }}
         clean: false
         path: build
@@ -195,7 +195,7 @@ runs:
         gpg --passphrase-fd 0 --armor --detach-sign --pinentry-mode loopback --batch --yes \
         build/output/images/*.img*.xz
 
-    - uses: ncipollo/release-action@v1
+    - uses: actions/checkout@v3
       with:
         tag: ${{ inputs.armbian_release_tag != '' && inputs.armbian_release_tag || env.ARMBIAN_VERSION }}
         name: "${{ inputs.armbian_release_tittle }}"
