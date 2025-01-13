@@ -148,7 +148,7 @@ runs:
         #mkdir -pv build/userpatches
         #rsync -av os/userpatches/. build/userpatches/
         #[[ -d custom/userpatches ]] && rsync -av custom/userpatches/. build/userpatches/
-        
+        cp os/config/boards/. build/config/boards
         mkdir build/userpatches
         cp os/userpatches/customize-image.sh build/userpatches/customize-image.sh
 
