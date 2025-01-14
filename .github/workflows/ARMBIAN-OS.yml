@@ -60,9 +60,8 @@ on:
 jobs:
 
   build:
-
-    name: "Build Armbian"
     runs-on: ubuntu-latest
+    needs: prepare_release
     steps:
       - name: Check Pre Sources
         shell: bash
@@ -73,7 +72,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Upload Armbian image
-      - uses: YANXIAOXIH/SOM3588-Armbian@armbin
+        uses: YANXIAOXIH/SOM3588-Armbian@main
         if: matrix.DISTRO == 'armbian'
         with:
           armbian_token:              "${{secrets.GITHUB_TOKEN}}"
