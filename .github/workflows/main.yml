@@ -27,11 +27,10 @@ jobs:
           path: build
 
       - name: "Install SSH key"
-        uses: shimataro/ssh-key-action@v2
+        uses: ncipollo/release-action@main
         with:
-          key: ${{ secrets.KEY_UPLOAD }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS_ARMBIAN_UPLOAD }}
-          if_key_exists: replace
+          key: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: "Cleanup upload folder"
         run: |
@@ -79,11 +78,10 @@ jobs:
           password: "${{ secrets.GITHUB_TOKEN }}"    # GitHub actions builtin token. repo has to have pkg access.
 
       - name: "Install SSH key"
-        uses: shimataro/ssh-key-action@v2
+        uses: ncipollo/release-action@main
         with:
-          key: ${{ secrets.KEY_UPLOAD }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS_ARMBIAN_UPLOAD }}
-          if_key_exists: replace
+          key: ${{ secrets.GITHUB_TOKEN }}
+
 
       #- name: Free Github Runner
       #  uses: descriptinc/free-disk-space@main
@@ -133,8 +131,8 @@ jobs:
 
           bash ./compile.sh armbian-images \
           IMAGE_XZ_COMPRESSION_RATIO=1 \
-          BOARD=uefi-x86 \
-          BRANCH=current \
+          BOARD=som3588 \
+          BRANCH=vendor \
           BUILD_DESKTOP="${BUILD_DESKTOP}" \
           BUILD_MINIMAL="${BUILD_MINIMAL}" \
           DESKTOP_APPGROUPS_SELECTED= \
