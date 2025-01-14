@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - uses: YANXIAOXIH/SOM3588-Armbian@main
+      - uses: YANXIAOXIH/SOM3588-Armbian@armbin
         with:
           armbian_token:              "${{secrets.GITHUB_TOKEN}}"
           armbian_target:             "${{inputs.armbian_target}}"
