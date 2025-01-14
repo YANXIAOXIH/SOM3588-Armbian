@@ -173,7 +173,11 @@ runs:
 
         # go to build folder
         cd build
-
+        
+        touch .ignore_changes
+        git status
+        docker pull ghcr.io/armbian/docker-armbian-build:armbian-ubuntu-jammy-latest
+        
         # execute build command
         ./compile.sh "${{ inputs.armbian_target }}" \
         REVISION="${{ env.ARMBIAN_VERSION }}" \
