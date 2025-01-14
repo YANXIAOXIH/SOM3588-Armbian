@@ -1,4 +1,4 @@
-name: Build-som3588-cat
+name: Build-som3588-cat-OS
 on:
   workflow_dispatch:
 
