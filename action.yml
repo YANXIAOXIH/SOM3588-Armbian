@@ -125,7 +125,7 @@ runs:
     - name: "Checkout Armbian build framework"
       uses: actions/checkout@v4
       with:
-        repository: armbian/build
+        repository: YANXIAOXIH/som3588-cat-armbian
         ref: ${{ inputs.armbian_branch }}
         clean: false
         path: build
