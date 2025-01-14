@@ -85,7 +85,7 @@ inputs:
   armbian_release_body:
     description: "Armbian images"
     required: false
-    default: "Build with [Armbian tools](https://github.com/armbian/build)"
+    default: "Build with [Armbian tools](https://github.com/YANXIAOXIH/som3588-cat-armbian)"
         
   armbian_release_tag:
     description: "Armbian release tag"
@@ -141,17 +141,17 @@ runs:
       run: |
         
         # read version from upstream Armbian OS
-        cat os/stable.json | jq '.version' | sed "s/\"//g" | sed 's/^/ARMBIAN_VERSION=/' >> $GITHUB_ENV
-        [[ "${{ inputs.armbian_version }}" != '' ]] && echo "ARMBIAN_VERSION=${{ inputs.armbian_version }}" >> $GITHUB_ENV
+        #cat os/stable.json | jq '.version' | sed "s/\"//g" | sed 's/^/ARMBIAN_VERSION=/' >> $GITHUB_ENV
+        #[[ "${{ inputs.armbian_version }}" != '' ]] && echo "ARMBIAN_VERSION=${{ inputs.armbian_version }}" >> $GITHUB_ENV
 
         # copy os userpatches and custom
         #mkdir -pv build/userpatches
         #rsync -av os/userpatches/. build/userpatches/
         #[[ -d custom/userpatches ]] && rsync -av custom/userpatches/. build/userpatches/
 
-        mkdir build/userpatches
-        cp -r os/userpatches/. build/userpatches/
-        cp -r custom/addboard/. build/userpatches/
+        #mkdir build/userpatches
+        #cp -r os/userpatches/. build/userpatches/
+        #cp -r custom/addboard/. build/userpatches/
         #cp os/userpatches/customize-image.sh build/userpatches/customize-image.sh
 
     - shell: bash
@@ -181,23 +181,19 @@ runs:
         
         # execute build command
         ./compile.sh "${{ inputs.armbian_target }}" \
-        REVISION="${{ env.ARMBIAN_VERSION }}" \
         BOARD="${{ inputs.armbian_board }}" \
         BRANCH="${{ inputs.armbian_kernel_branch }}" \
         RELEASE="${{ inputs.armbian_release }}" \
         KERNEL_CONFIGURE="no" \
         BUILD_DESKTOP="${BUILD_DESKTOP}" \
         BUILD_MINIMAL="${BUILD_MINIMAL}" \
-        DESKTOP_ENVIRONMENT="${DESKTOP_ENVIRONMENT}" \
-        DESKTOP_APPGROUPS_SELECTED="${DESKTOP_APPGROUPS_SELECTED}" \
-        DESKTOP_ENVIRONMENT_CONFIG_NAME="${DESKTOP_ENVIRONMENT_CONFIG_NAME}" \
-        ENABLE_EXTENSIONS="${{ inputs.armbian_extensions }}" \
         COMPRESS_OUTPUTIMAGE="${{ inputs.armbian_compress }}" \
         SHARE_LOG="yes" \
         EXPERT="yes"\
         VENDOR=Armbian \
         USE_CCACHE=yes \
         # BOARD_FIRMWARE_INSTALL="-full" 
+
 
     - name: Sign
       shell: bash
