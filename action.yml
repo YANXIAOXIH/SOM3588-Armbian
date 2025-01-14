@@ -51,11 +51,11 @@ runs:
         BUILD_DESKTOP=${{ env.build-desktop }} \
         KERNEL_CONFIGURE=no \
         EXPERT=${{ env.expert }} \
-        BOARD_FIRMWARE_INSTALL="-full" \
-        SHARE_LOG=no \
+        #BOARD_FIRMWARE_INSTALL="-full" \
+        SHARE_LOG=yes \
         USE_CCACHE=yes \
         DEBUG=yes \
-        VENDOR=Armbian \
+        #VENDOR=Armbian \
         COMPRESS_OUTPUTIMAGE=sha,gpg,xz
     - name: Upload
       if: inputs.release-id != '' && inputs.github-token != ''
