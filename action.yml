@@ -189,7 +189,10 @@ runs:
         ENABLE_EXTENSIONS="${{ inputs.armbian_extensions }}" \
         COMPRESS_OUTPUTIMAGE="${{ inputs.armbian_compress }}" \
         SHARE_LOG="yes" \
-        EXPERT="yes"
+        EXPERT="yes"\
+        VENDOR=Armbian \
+        USE_CCACHE=yes \
+        BOARD_FIRMWARE_INSTALL="-full" 
 
     - name: Sign
       shell: bash
