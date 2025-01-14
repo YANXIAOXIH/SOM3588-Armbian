@@ -30,6 +30,7 @@ jobs:
         uses: ncipollo/release-action@main
         with:
           key: ${{ secrets.GITHUB_TOKEN }}
+          if_key_exists: replace
 
 
       - name: "Cleanup upload folder"
@@ -81,6 +82,7 @@ jobs:
         uses: ncipollo/release-action@main
         with:
           key: ${{ secrets.GITHUB_TOKEN }}
+          if_key_exists: replace
 
 
       #- name: Free Github Runner
