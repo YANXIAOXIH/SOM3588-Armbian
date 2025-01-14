@@ -181,12 +181,17 @@ runs:
         
         # execute build command
         ./compile.sh "${{ inputs.armbian_target }}" \
+        REVISION="${{ env.ARMBIAN_VERSION }}" \
         BOARD="${{ inputs.armbian_board }}" \
         BRANCH="${{ inputs.armbian_kernel_branch }}" \
         RELEASE="${{ inputs.armbian_release }}" \
         KERNEL_CONFIGURE="no" \
         BUILD_DESKTOP="${BUILD_DESKTOP}" \
         BUILD_MINIMAL="${BUILD_MINIMAL}" \
+        DESKTOP_ENVIRONMENT="${DESKTOP_ENVIRONMENT}" \
+        DESKTOP_APPGROUPS_SELECTED="${DESKTOP_APPGROUPS_SELECTED}" \
+        DESKTOP_ENVIRONMENT_CONFIG_NAME="${DESKTOP_ENVIRONMENT_CONFIG_NAME}" \
+        ENABLE_EXTENSIONS="${{ inputs.armbian_extensions }}" \
         COMPRESS_OUTPUTIMAGE="${{ inputs.armbian_compress }}" \
         SHARE_LOG="yes" \
         EXPERT="yes"\
