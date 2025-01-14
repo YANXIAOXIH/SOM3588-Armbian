@@ -197,7 +197,7 @@ runs:
         EXPERT="yes"\
         VENDOR=Armbian \
         USE_CCACHE=yes \
-        BOARD_FIRMWARE_INSTALL="-full" 
+        # BOARD_FIRMWARE_INSTALL="-full" 
 
     - name: Sign
       shell: bash
