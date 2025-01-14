@@ -62,19 +62,9 @@ jobs:
   build:
     name: "Build Armbian"
     runs-on: ubuntu-latest
-    needs: prepare_release
     steps:
-      - name: Check Pre Sources
-        shell: bash
-        run: |
-          DEL_PATH=$(pwd)
-          cd .. && rm -rf ${DEL_PATH}
-          mkdir ${DEL_PATH} && cd ${DEL_PATH}
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Upload Armbian image
-        uses: YANXIAOXIH/SOM3588-Armbian@main
-        if: matrix.DISTRO == 'armbian'
+
+      - uses: YANXIAOXIH/SOM3588-Armbian@main
         with:
           armbian_token:              "${{secrets.GITHUB_TOKEN}}"
           armbian_target:             "${{inputs.armbian_target}}"
