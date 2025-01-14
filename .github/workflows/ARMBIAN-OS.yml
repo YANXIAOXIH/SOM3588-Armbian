@@ -59,29 +59,8 @@ on:
 
 jobs:
 
-  prepare_release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Get time
-        id: time
-        uses: nanzm/get-time-action@v1.1
-        with:
-          format: 'YYYYMMDD-HHmm'
-      - name: Create empty release
-        id: release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ steps.time.outputs.time }}
-          body_path: README.md
-          token: ${{ secrets.GITHUB_TOKEN }}
-          target_commitish: main
-          draft: false
-    outputs:
-      release_id: ${{ steps.release.outputs.id }}
-
   build:
+
     name: "Build Armbian"
     runs-on: ubuntu-latest
     steps:
@@ -94,7 +73,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Upload Armbian image
-        uses: YANXIAOXIH/SOM3588-Armbian@armbin
+      - uses: YANXIAOXIH/SOM3588-Armbian@armbin
         if: matrix.DISTRO == 'armbian'
         with:
           armbian_token:              "${{secrets.GITHUB_TOKEN}}"
