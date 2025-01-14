@@ -125,7 +125,7 @@ runs:
     - name: "Checkout Armbian build framework"
       uses: actions/checkout@v4
       with:
-        repository: YANXIAOXIH/som3588-cat-armbian
+        repository: armbian/build
         ref: ${{ inputs.armbian_branch }}
         clean: false
         path: build
@@ -151,6 +151,7 @@ runs:
 
         mkdir build/userpatches
         cp -r os/userpatches/. build/userpatches/
+        cp -r custom/addboard/. build/userpatches/
         #cp os/userpatches/customize-image.sh build/userpatches/customize-image.sh
 
     - shell: bash
