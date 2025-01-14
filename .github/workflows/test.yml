@@ -1,4 +1,4 @@
-name: Build-som3588-cat-OS
+name: Build-som3588-cat
 on:
   workflow_dispatch:
 
@@ -12,7 +12,19 @@ jobs:
         id: time
         uses: nanzm/get-time-action@v1.1
         with:
-          format: 'YYYYMMDD-HHmm'
+          format: 'YYYYMM'
+      - name: Create empty release
+        id: release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: Armbian-${{ steps.time.outputs.time }}
+          #body_path: README.md
+          body: |
+            ### Armbian Image Information
+            - Release: ${{ env.release }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target_commitish: main
+          draft: false
     outputs:
       release_id: ${{ steps.release.outputs.id }}
   build:
