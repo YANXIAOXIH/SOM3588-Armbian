@@ -1,27 +1,7 @@
 name: Build-som3588-cat
 on:
   workflow_dispatch:
-    inputs:
 
-
-      BRANCH:
-        description: 'Armbian branch'
-        default: 'vendor'
-        required: true
-        type: choice
-        options:
-          - 'current'
-          - 'edge'
-          - 'vendor'
-      RELEASE:
-        description: 'Armbian FLAVOR'
-        default: 'debian'
-        required: true
-        type: choice
-        options:
-          - 'debian'
-          - 'ubuntu'
-       
 jobs:
   prepare_release:
     runs-on: ubuntu-latest
@@ -51,8 +31,8 @@ jobs:
       matrix:
         BOARD: [som3588-cat]
         DISTRO: [armbian]
-        FLAVOR: [${{ inputs.RELEASE }}]
-        BRANCH: [${{ inputs.BRANCH }}]
+        FLAVOR: [debian]
+        BRANCH: [vendor]
     steps:
       - name: Check Pre Sources
         shell: bash
@@ -71,4 +51,3 @@ jobs:
           flavor: ${{ matrix.FLAVOR }}
           release-id: ${{ needs.prepare_release.outputs.release_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
