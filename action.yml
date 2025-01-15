@@ -15,7 +15,7 @@ runs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        repository: YANXIAOXIH/som3588-cat-armbian
+        repository: YANXIAOXIH/SOM3588-cat-armbian
         ref: main
         path: build
     - name: Set env
@@ -51,8 +51,8 @@ runs:
         BUILD_DESKTOP=${{ env.build-desktop }} \
         KERNEL_CONFIGURE=no \
         EXPERT=${{ env.expert }} \
-        #BOARD_FIRMWARE_INSTALL="-full" \
-        SHARE_LOG=yes \
+        BOARD_FIRMWARE_INSTALL="-full" \
+        SHARE_LOG=no \
         USE_CCACHE=yes \
         DEBUG=yes \
         VENDOR=Armbian \
