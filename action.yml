@@ -23,7 +23,7 @@ runs:
       run: |
         if [ ${{ inputs.flavor }} == "debian" ]
         then
-          echo "release=trixie" >> $GITHUB_ENV
+          echo "release=bullseye" >> $GITHUB_ENV
           echo "build-minimal=no" >> $GITHUB_ENV
           echo "build-desktop=no" >> $GITHUB_ENV
           echo "expert=yes" >> $GITHUB_ENV
@@ -51,7 +51,7 @@ runs:
         BUILD_DESKTOP=${{ env.build-desktop }} \
         KERNEL_CONFIGURE=no \
         EXPERT=${{ env.expert }} \
-        #BOARD_FIRMWARE_INSTALL="-full" \
+        BOARD_FIRMWARE_INSTALL="-full" \
         SHARE_LOG=no \
         USE_CCACHE=yes \
         DEBUG=yes \
