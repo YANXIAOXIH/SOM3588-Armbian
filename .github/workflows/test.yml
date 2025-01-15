@@ -1,6 +1,14 @@
 name: Build-som3588-cat
 on:
   workflow_dispatch:
+    inputs:
+      BOARD:
+        description: 'Board type'
+        required: true
+        default: 'som3588-cat'
+        type: choice
+        options:
+          - 'som3588-cat'
 
 jobs:
   prepare_release:
