@@ -29,9 +29,9 @@ jobs:
     needs: prepare_release
     strategy:
       matrix:
-        BOARD: [cyber-aib]
+        BOARD: [som3588-cat]
         DISTRO: [armbian]
-        FLAVOR: [ubuntu]
+        FLAVOR: [debian]
         BRANCH: [vendor]
     steps:
       - name: Check Pre Sources
@@ -51,3 +51,4 @@ jobs:
           flavor: ${{ matrix.FLAVOR }}
           release-id: ${{ needs.prepare_release.outputs.release_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
