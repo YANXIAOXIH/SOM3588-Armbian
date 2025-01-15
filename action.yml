@@ -51,7 +51,7 @@ runs:
         BUILD_DESKTOP=${{ env.build-desktop }} \
         KERNEL_CONFIGURE=no \
         EXPERT=${{ env.expert }} \
-        BOARD_FIRMWARE_INSTALL="-full" \
+        #BOARD_FIRMWARE_INSTALL="-full" \
         SHARE_LOG=no \
         USE_CCACHE=yes \
         DEBUG=yes \
