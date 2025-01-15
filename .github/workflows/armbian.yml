@@ -95,17 +95,8 @@ jobs:
         working-directory: /mnt/workdir
         run: |
           df -hT ${PWD}
-          git clone -q --single-branch --depth=1 --branch=main https://github.com/armbian/build.git build
+          git clone -q --single-branch --depth=1 --branch=main https://github.com/YANXIAOXIH/sOM3588-cat-armbian.git build
           ln -sf /mnt/workdir/build $GITHUB_WORKSPACE/build
-
-          cd build/
-          # 复制 config 和 userpatches 目录文件    
-          cp -rf ${{ github.workspace }}/addboard/config/* config
-          mkdir -p userpatches/patch/kernel/archive/rockchip64-6.13
-          cp -rf ${{ github.workspace }}/addboard/* userpatches
-          cp -rf ${{ github.workspace }}/addboard/patch/kernel/rk35xx-vendor-6.1/* userpatches/patch/kernel/archive/rockchip64-6.13
-          ls -la
-  
 
       - name: Compile Armbian [ ${{ inputs.BOARD }} ${{ inputs.BRANCH }} ${{ inputs.RELEASE }} ]
         run: |
