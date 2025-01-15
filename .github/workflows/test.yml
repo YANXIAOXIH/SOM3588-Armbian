@@ -29,7 +29,7 @@ jobs:
     needs: prepare_release
     strategy:
       matrix:
-        BOARD: [som3588-cat]
+        BOARD: [cyber-aib]
         DISTRO: [armbian]
         FLAVOR: [ubuntu]
         BRANCH: [vendor]
