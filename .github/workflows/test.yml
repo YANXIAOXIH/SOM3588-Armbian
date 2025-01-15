@@ -12,16 +12,13 @@ jobs:
         id: time
         uses: nanzm/get-time-action@v1.1
         with:
-          format: 'YYYYMM'
+          format: 'YYYYMMDD-HHmm'
       - name: Create empty release
         id: release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: Armbian-${{ steps.time.outputs.time }}
-          #body_path: README.md
-          body: |
-            ### Armbian Image Information
-            - Release:${{ needs.prepare_release.outputs.release_id }}
+          tag_name: ${{ steps.time.outputs.time }}
+          body_path: README.md
           token: ${{ secrets.GITHUB_TOKEN }}
           target_commitish: main
           draft: false
