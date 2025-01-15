@@ -1,23 +1,7 @@
 name: Build-som3588-cat
 on:
   workflow_dispatch:
-    inputs:
-      BRANCH:
-        description: 'Armbian branch'
-        default: 'vendor'
-        required: true
-        type: choice
-        options:
-          - 'edge'
-          - 'vendor'
-      RELEASE:
-        description: 'Release name'
-        default: 'debian'
-        required: true
-        type: choice
-        options:
-          - 'debian'
-          - 'ubuntu'
+
 jobs:
   prepare_release:
     runs-on: ubuntu-latest
