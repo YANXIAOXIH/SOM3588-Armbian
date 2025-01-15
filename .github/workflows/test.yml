@@ -2,7 +2,9 @@ name: Build-som3588-cat
 on:
   workflow_dispatch:
     inputs:
-       BRANCH:
+
+
+      BRANCH:
         description: 'Armbian branch'
         default: 'vendor'
         required: true
@@ -11,7 +13,7 @@ on:
           - 'current'
           - 'edge'
           - 'vendor'
-       RELEASE:
+      RELEASE:
         description: 'Armbian FLAVOR'
         default: 'debian'
         required: true
