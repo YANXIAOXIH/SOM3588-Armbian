@@ -23,7 +23,7 @@ runs:
       run: |
         if [ ${{ inputs.flavor }} == "debian" ]
         then
-          echo "release=trixie" >> $GITHUB_ENV
+          echo "release=bookworm" >> $GITHUB_ENV
           echo "build-minimal=no" >> $GITHUB_ENV
           echo "build-desktop=no" >> $GITHUB_ENV
           echo "expert=yes" >> $GITHUB_ENV
