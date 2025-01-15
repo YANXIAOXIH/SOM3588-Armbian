@@ -47,8 +47,8 @@ jobs:
       matrix:
         BOARD: [som3588-cat]
         DISTRO: [armbian]
-        FLAVOR: [${{ inputs.RELEASE }}]
-        BRANCH: [${{ inputs.BRANCH }}]
+        FLAVOR: [debian]
+        BRANCH: [vendor]
     steps:
       - name: Check Pre Sources
         shell: bash
