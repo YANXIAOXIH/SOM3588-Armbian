@@ -28,11 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: prepare_release
     strategy:
-      matrix:
-        BOARD: [som3588-cat]
-        DISTRO: [armbian]
-        FLAVOR: [debian]
-        BRANCH: [vendor]
     steps:
       - name: Check Pre Sources
         shell: bash
