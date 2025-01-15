@@ -31,7 +31,7 @@ jobs:
       matrix:
         BOARD: [som3588-cat]
         DISTRO: [armbian]
-        FLAVOR: [debian]
+        FLAVOR: [ubuntu]
         BRANCH: [vendor]
     steps:
       - name: Check Pre Sources
