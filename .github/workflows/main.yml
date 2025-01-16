@@ -77,7 +77,7 @@ jobs:
       - name: armbian-build
         uses: actions/checkout@v4
         with:
-          repository: armbian/build
+          repository: YANXIAOXIH/SOM3588-cat-armbian
           ref: main
           path: build
           
