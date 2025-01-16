@@ -43,7 +43,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Upload Armbian image
-        uses: YANXIAOXIH/SOM3588-Armbian@armbin
+        uses: YANXIAOXIH/SOM3588-Armbian@main
         if: matrix.DISTRO == 'armbian'
         with:
           branch: ${{ matrix.BRANCH }}
