@@ -1,0 +1,114 @@
+name: Build-Armbian-test-0.1
+on:
+  workflow_dispatch:
+    inputs:
+      board:
+        description: 'Board type'  
+        required: true 
+        default: 'som3588-cat'
+        type: choice
+        options:
+          - som3588-cat
+          - avaota-a1
+      flavor:
+        description: 'Release name' 
+        default: 'debian'
+        required: true  
+        type: choice
+        options:
+          - debian
+          - ubuntu
+      release-id:
+        required: false
+      github-token:
+        required: false
+env:
+  TZ: Asia/Shanghai
+
+jobs:  
+  build-armbian:  
+    runs-on: ubuntu-latest  
+    steps:
+      - name: SOM3588Cat-addboard
+        uses: actions/checkout@v4
+        with:
+          repository: YANXIAOXIH/SOM3588-cat-armbian
+          ref: main
+          path: SOM3588Cat
+          
+      - name: armbian-build
+        uses: actions/checkout@v4
+        with:
+          repository: armbian/build
+          ref: main
+          path: build
+          
+      - name: Set env
+        shell: bash
+        run: |
+          if [ ${{ inputs.flavor }} == "debian" ]
+          then
+            echo "release=bullseye" >> $GITHUB_ENV
+            echo "build-minimal=no" >> $GITHUB_ENV
+            echo "build-desktop=no" >> $GITHUB_ENV
+            echo "expert=yes" >> $GITHUB_ENV
+          elif [ ${{ inputs.flavor }} == "ubuntu" ]
+          then
+            echo "release=jammy" >> $GITHUB_ENV
+            echo "build-minimal=no" >> $GITHUB_ENV
+            echo "build-desktop=no" >> $GITHUB_ENV
+            echo "expert=yes" >> $GITHUB_ENV
+          fi
+          
+      - name: Compile Armbian
+        shell: bash
+        run: |
+          cd ./build
+          touch .ignore_changes
+          
+          git status
+          docker pull ghcr.io/armbian/docker-armbian-build:armbian-ubuntu-jammy-latest
+               
+          ./compile.sh \
+          BOARD=${{ inputs.board }} \
+          BRANCH=${{ inputs.branch }} \
+          RELEASE=${{ env.release }} \
+          BUILD_MINIMAL=${{ env.build-minimal }} \
+          BUILD_DESKTOP=${{ env.build-desktop }} \
+          KERNEL_CONFIGURE=no \
+          EXPERT=${{ env.expert }} \
+          BOARD_FIRMWARE_INSTALL="-full" \
+          SHARE_LOG=no \
+          USE_CCACHE=yes \
+          DEBUG=yes \
+          VENDOR=Armbian \
+          COMPRESS_OUTPUTIMAGE=sha,gpg,xz
+      - name: Prepare Release Metadata
+        run: |  
+          # 提取版本号
+          # latest_image=$(ls ${{ github.workspace }}/build/output/images/Armbian-unofficial_*.img.xz | grep -oE 'Armbian-unofficial_[0-9.]+_.*' | sort -V | tail -n 1) 
+          latest_image=$(ls ${{ github.workspace }}/build/output/images/Armbian*.img.xz | sort -V | tail -n 1)
+          version=$(echo "$latest_image" | cut -d'_' -f2)  
+  
+          # 将版本号设置为环境变量  
+          echo "VERSION=$version" >> $GITHUB_ENV
+        
+      - name: Upload image to Release  
+        if: success() 
+        uses: ncipollo/release-action@main
+        with:  
+          tag: "Armbian_${{ github.event.inputs.Version }}_${{ env.CURRENT_YEAR_MONTH }}"  
+          name: "Armbian_${{ github.event.inputs.Version }}_${{ env.CURRENT_YEAR_MONTH }}"  
+          artifacts: "${{ github.workspace }}/build/output/images/*"  
+          allowUpdates: true 
+          removeArtifacts: false 
+          replacesArtifacts: true 
+          token: ${{ secrets.GITHUB_TOKEN }}  
+          body: |  
+            ### Armbian Image Information  
+            - Release: ${{ github.event.inputs.RELEASE }}    
+            - Version: ${{ env.VERSION }}  
+            ### Armbian Image Verification  
+            - sha256sum   
+          draft: false  
+          prerelease: false  
