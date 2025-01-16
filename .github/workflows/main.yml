@@ -1,27 +1,65 @@
 name: Build-Armbian-test-0.1
-on:
-  workflow_dispatch:
-    inputs:
-      board:
+on:  
+  workflow_dispatch:  
+    inputs:  
+      BOARD:  
         description: 'Board type'  
         required: true 
         default: 'som3588-cat'
         type: choice
         options:
           - som3588-cat
-          - avaota-a1
-      flavor:
+      BRANCH:  
+        description: 'Armbian branch'  
+        default: 'vendor'  
+        required: false 
+        type: choice 
+        options:
+          - vendor
+          - edge
+      RELEASE:  
         description: 'Release name' 
-        default: 'debian'
+        default: 'bookworm'
         required: true  
         type: choice
         options:
-          - debian
-          - ubuntu
-      release-id:
-        required: false
-      github-token:
-        required: false
+          - jammy
+          - mantic
+          - bookworm
+          - trixie
+          - noble
+          - bullseye
+      Version:
+        description: 'Armbian Version'
+        default: 'main'
+        required: false 
+        type: choice
+        options: 
+          - main
+          - v24.11
+          - v24.08
+          - rk3588-6.12-initial
+      BUILD_DESKTOP:  
+        description: 'Build desktop environment'  
+        default: 'no'  
+        required: false  
+        type: choice
+        options:
+          - no
+          - yes
+      COMPRESS_OUTPUTIMAGE:  
+        description: 'Compress output image'  
+        default: 'sha,xz'  
+        required: false  
+        type: string  
+      BOOT_LOGO:  
+        description: 'Include boot logo'  
+        default: 'yes'  
+        required: false  
+        type: choice 
+        options:
+          - yes
+          - no
 env:
   TZ: Asia/Shanghai
 
@@ -43,23 +81,6 @@ jobs:
           ref: main
           path: build
           
-      - name: Set env
-        shell: bash
-        run: |
-          if [ ${{ inputs.flavor }} == "debian" ]
-          then
-            echo "release=bullseye" >> $GITHUB_ENV
-            echo "build-minimal=no" >> $GITHUB_ENV
-            echo "build-desktop=no" >> $GITHUB_ENV
-            echo "expert=yes" >> $GITHUB_ENV
-          elif [ ${{ inputs.flavor }} == "ubuntu" ]
-          then
-            echo "release=jammy" >> $GITHUB_ENV
-            echo "build-minimal=no" >> $GITHUB_ENV
-            echo "build-desktop=no" >> $GITHUB_ENV
-            echo "expert=yes" >> $GITHUB_ENV
-          fi
-          
       - name: Compile Armbian
         shell: bash
         run: |
@@ -70,13 +91,13 @@ jobs:
           docker pull ghcr.io/armbian/docker-armbian-build:armbian-ubuntu-jammy-latest
                
           ./compile.sh \
-          BOARD=${{ inputs.board }} \
-          BRANCH=${{ inputs.branch }} \
-          RELEASE=${{ env.release }} \
-          BUILD_MINIMAL=${{ env.build-minimal }} \
-          BUILD_DESKTOP=${{ env.build-desktop }} \
+          BOARD=${{ inputs.BOARD }} \
+          BRANCH=${{ inputs.BRANCH }} \
+          RELEASE=${{ inputs.RELEASE }} \
+          BUILD_MINIMAL=no \
+          BUILD_DESKTOP=no \
           KERNEL_CONFIGURE=no \
-          EXPERT=${{ env.expert }} \
+          EXPERT=yes \
           BOARD_FIRMWARE_INSTALL="-full" \
           SHARE_LOG=no \
           USE_CCACHE=yes \
